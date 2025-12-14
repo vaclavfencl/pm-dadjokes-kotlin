@@ -10,6 +10,11 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import com.vfencl.pmdadjokeskotlin.ui.AppTab
+import androidx.compose.material.icons.filled.Star
+import androidx.compose.material.icons.filled.ViewInAr
+import androidx.compose.material.icons.outlined.StarBorder
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material.icons.outlined.Shuffle
 
 @Composable
 fun BottomBar(
@@ -20,22 +25,28 @@ fun BottomBar(
         NavigationBarItem(
             selected = selected == AppTab.RANDOM,
             onClick = { onSelected(AppTab.RANDOM) },
-            icon = { Icon(Icons.Filled.Refresh, contentDescription = null) },
+            icon = {
+                Icon(Icons.Outlined.Shuffle, contentDescription = null)
+            }
             //label = { Text("Random") }
         )
 
         NavigationBarItem(
             selected = selected == AppTab.CUSTOM,
             onClick = { onSelected(AppTab.CUSTOM) },
-            icon = { Icon(Icons.Filled.Add, contentDescription = null) },
-            //label = { Text("Add") }
+            icon = { Text("Aa", style = MaterialTheme.typography.titleLarge) }
+            //label = { Text("Custom") }
         )
 
         NavigationBarItem(
             selected = selected == AppTab.SAVED,
             onClick = { onSelected(AppTab.SAVED) },
-            icon = { Icon(Icons.Filled.Favorite, contentDescription = null) },
-            //label = { Text("Saved") }
+            icon = {
+                Icon(
+                    imageVector = if (selected == AppTab.SAVED) Icons.Filled.Star else Icons.Outlined.StarBorder,
+                    contentDescription = null
+                )
+            }
         )
     }
 }

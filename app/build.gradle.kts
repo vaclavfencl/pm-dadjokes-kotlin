@@ -61,7 +61,9 @@ dependencies {
     implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.room.ktx)
     ksp(libs.androidx.room.compiler)
-
+    //Icons
+    implementation(libs.androidx.compose.material.icons.extended)
+    implementation("com.composables:icons-lucide:1.1.0")
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)

@@ -15,6 +15,11 @@ import com.vfencl.pmdadjokeskotlin.data.NetworkJokesRepository
 import com.vfencl.pmdadjokeskotlin.data.ServiceLocator
 import com.vfencl.pmdadjokeskotlin.data.remote.ApiClient
 import kotlinx.coroutines.launch
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ContentCopy
+import androidx.compose.material.icons.filled.Star
+import androidx.compose.material.icons.filled.Undo
+import androidx.compose.material.icons.outlined.StarBorder
 
 private class RandomVmFactory : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
@@ -54,16 +59,18 @@ fun TabWithRandomJokes(modifier: Modifier = Modifier) {
             Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                 Button(onClick = vm::next, enabled = !state.loading) { Text("GENERATE NEW JOKE") }
 
-                Button(
+                FilledTonalIconButton(
                     enabled = state.joke != null && !state.loading,
                     onClick = {
-                        val joke = state.joke ?: return@Button
+                        val joke = state.joke ?: return@FilledTonalIconButton
                         clipboard.setText(AnnotatedString(joke))
-                        scope.launch { snackbarHostState.showSnackbar("Copied") }
+                        scope.launch { snackbarHostState.showSnackbar("Zkopírováno") }
                     }
-                ) { Text("COPY ICON") }
+                ) {
+                    Icon(Icons.Filled.ContentCopy, contentDescription = "Kopírovat")
+                }
 
-                Button(
+                FilledTonalIconButton(
                     enabled = state.joke != null && !state.loading,
                     onClick = {
                         val wasSaved = state.isSaved
@@ -81,7 +88,13 @@ fun TabWithRandomJokes(modifier: Modifier = Modifier) {
                         }
                     }
                 ) {
-                    Text(if (state.isSaved) "UNDO ICON" else "SAVE ICON")
+                    Icon(
+                        imageVector = when {
+                            state.isSaved -> Icons.Filled.Undo
+                            else -> Icons.Outlined.StarBorder
+                        },
+                        contentDescription = if (state.isSaved) "Smazat" else "Uložit"
+                    )
                 }
             }
         }

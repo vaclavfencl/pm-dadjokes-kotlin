@@ -10,6 +10,8 @@ import androidx.compose.ui.unit.dp
 import com.vfencl.pmdadjokeskotlin.data.ServiceLocator
 import kotlinx.coroutines.launch
 
+private const val MAX_CHARS = 250
+
 @Composable
 fun TabWithCustomJokes(modifier: Modifier = Modifier) {
     var text by rememberSaveable { mutableStateOf("") }
@@ -33,13 +35,18 @@ fun TabWithCustomJokes(modifier: Modifier = Modifier) {
             Text("Chybí ti nějaký dad joke? Ulož si ho u nás!")
             OutlinedTextField(
                 value = text,
-                onValueChange = { text = it },
-                label = { Text("Váš vtip") },
+                onValueChange = { incoming ->
+                    text = if (incoming.length <= MAX_CHARS) incoming else incoming.take(MAX_CHARS)
+                },
+                label = { Text("Napiš vtip") },
+                supportingText = { Text("${text.length}/$MAX_CHARS") },
+                isError = text.length >= MAX_CHARS,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .heightIn(min = 140.dp, max = 500.dp),
-                minLines = 6
+                    .heightIn(min = 100.dp, max = 500.dp),
+                minLines = 4
             )
+
 
             val canSave = text.trim().isNotEmpty() && !isSaving
 
