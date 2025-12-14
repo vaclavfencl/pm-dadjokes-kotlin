@@ -22,19 +22,23 @@ fun TabWithCustomJokes(modifier: Modifier = Modifier) {
         modifier = modifier
             .fillMaxSize()
             .padding(16.dp)
+            .imePadding()
     ) {
         Column(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier.fillMaxSize(),
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-            Text("Vlastní vtip", style = MaterialTheme.typography.titleLarge)
 
+            Text("Napiš vlastní dad joke", style = MaterialTheme.typography.titleLarge)
+            Text("Chybí ti nějaký dad joke? Ulož si ho u nás!")
             OutlinedTextField(
                 value = text,
                 onValueChange = { text = it },
-                label = { Text("Napiš vtip") },
-                modifier = Modifier.fillMaxWidth(),
-                minLines = 4
+                label = { Text("Váš vtip") },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .heightIn(min = 140.dp, max = 500.dp),
+                minLines = 6
             )
 
             val canSave = text.trim().isNotEmpty() && !isSaving
@@ -43,12 +47,11 @@ fun TabWithCustomJokes(modifier: Modifier = Modifier) {
                 enabled = canSave,
                 onClick = {
                     val savedText = text.trim()
-
                     scope.launch {
                         isSaving = true
                         try {
                             ServiceLocator.savedStore.save(savedText, source = "CUSTOM")
-                            text = "" // smaž až po úspěšném uložení
+                            text = ""
 
                             val res = snackbarHostState.showSnackbar(
                                 message = "Uloženo",
@@ -59,16 +62,12 @@ fun TabWithCustomJokes(modifier: Modifier = Modifier) {
                                 ServiceLocator.savedStore.remove(savedText)
                                 snackbarHostState.showSnackbar("Vráceno")
                             }
-                        } catch (t: Throwable) {
-                            snackbarHostState.showSnackbar("Nepodařilo se uložit")
                         } finally {
                             isSaving = false
                         }
                     }
                 }
-            ) {
-                Text("SAVE")
-            }
+            ) { Text("SAVE") }
         }
 
         SnackbarHost(

@@ -3,6 +3,7 @@ package com.vfencl.pmdadjokeskotlin.ui.screens
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.text.AnnotatedString
@@ -33,14 +34,16 @@ fun TabWithRandomJokes(modifier: Modifier = Modifier) {
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
 
-    Scaffold(snackbarHost = { SnackbarHost(snackbarHostState) }) { inner ->
+    Box(
+        modifier = modifier
+            .fillMaxSize()
+            .padding(16.dp)
+    ) {
         Column(
-            modifier = modifier
-                .padding(inner)
-                .padding(16.dp),
+            modifier = Modifier.fillMaxWidth(),
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-            Text("Random Dad Joke", style = MaterialTheme.typography.titleLarge)
+            Text("Náhodný dad joke", style = MaterialTheme.typography.titleLarge)
 
             when {
                 state.loading -> CircularProgressIndicator()
@@ -58,7 +61,7 @@ fun TabWithRandomJokes(modifier: Modifier = Modifier) {
                         clipboard.setText(AnnotatedString(joke))
                         scope.launch { snackbarHostState.showSnackbar("Copied") }
                     }
-                ) { Text("COPY") }
+                ) { Text("COPY ICON") }
 
                 Button(
                     enabled = state.joke != null && !state.loading,
@@ -68,19 +71,26 @@ fun TabWithRandomJokes(modifier: Modifier = Modifier) {
 
                         scope.launch {
                             val res = snackbarHostState.showSnackbar(
-                                message = if (wasSaved) "Removed from saved" else "Saved",
-                                actionLabel = "Undo",
+                                message = if (wasSaved) "Odebráno z uložených" else "Uloženo",
+                                actionLabel = "Zrušit",
                                 duration = SnackbarDuration.Short
                             )
                             if (res == SnackbarResult.ActionPerformed) {
-                                vm.toggleSaved(source = "API") // Undo = toggle zpět
+                                vm.toggleSaved(source = "API")
                             }
                         }
                     }
                 ) {
-                    Text(if (state.isSaved) "REMOVE" else "SAVE")
+                    Text(if (state.isSaved) "UNDO ICON" else "SAVE ICON")
                 }
             }
         }
+
+        SnackbarHost(
+            hostState = snackbarHostState,
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .padding(bottom = 88.dp)
+        )
     }
 }

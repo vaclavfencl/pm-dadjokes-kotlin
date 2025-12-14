@@ -106,7 +106,7 @@ fun TabWithSavedJokes(modifier: Modifier = Modifier) {
                             )
 
                             TextButton(onClick = { vm.remove(joke) }) {
-                                Text("Remove")
+                                Text("Odebrat")
                             }
                         }
                     }
