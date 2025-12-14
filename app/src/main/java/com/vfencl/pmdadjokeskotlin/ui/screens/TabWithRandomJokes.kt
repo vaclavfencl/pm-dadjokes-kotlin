@@ -10,5 +10,17 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun TabWithRandomJokes(modifier: Modifier = Modifier) {
+    Column(
+        modifier = modifier.padding(16.dp),
+        verticalArrangement = Arrangement.spacedBy(12.dp)
+    ) {
+        Text("Náhodný dad joke", style = MaterialTheme.typography.titleLarge)
+        Text("RANDOM DAD JOKE PLACEHOLDER", style = MaterialTheme.typography.bodyMedium)
 
+        Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+            Button(onClick = { /* Generuj nový vtip */ }) { Text("GENERATE NEW JOKE") }
+            Button(onClick = { /* CTRLC */ }) { Text("COPY ICON") }
+            Button(onClick = { /* Ulož do paměti */ }) { Text("HVĚZDIČKA ICON") }
+        }
+    }
 }
