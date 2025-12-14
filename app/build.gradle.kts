@@ -1,6 +1,8 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
+    //Database
+    alias(libs.plugins.ksp)
 }
 
 android {
@@ -50,13 +52,15 @@ android {
 }
 
 dependencies {
+    //API
     implementation(libs.retrofit)
     implementation(libs.retrofit.converter.gson)
-
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
     implementation(libs.androidx.lifecycle.viewmodel.compose)
-
-
+    //Database
+    implementation(libs.androidx.room.runtime)
+    implementation(libs.androidx.room.ktx)
+    ksp(libs.androidx.room.compiler)
 
 
     implementation(libs.androidx.core.ktx)
